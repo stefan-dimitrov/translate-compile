@@ -211,6 +211,12 @@ Default value: `false`
 
 Should this value be set to true there will be no variable assignment inside the file, only the resulting json will be there.
 
+#### options.multipleFiles
+Type: `Boolean`
+Default value: `false`
+
+Use with `options.asJson` to split the translations into separate files for each language.
+
 #### options.moduleExports
 Type: `Boolean`
 Default value: `false`
