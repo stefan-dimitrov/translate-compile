@@ -16,6 +16,7 @@ module.exports = function(grunt) {
     var options = this.options({
       translationVar: 'angTranslations',
       multipleObjects: false,
+      multipleFiles: false,
       asJson: false
     });
 
@@ -49,6 +50,15 @@ module.exports = function(grunt) {
         // no js variables printed
         if (options.moduleExports) {
           compiled = 'module.exports = ' + JSON.stringify(compiled) + ';';
+
+        } else if (options.multipleFiles) {
+          // one file per language
+          for (var languageKey in compiled) {
+            var fileName = f.dest.replace('{lang}', languageKey);
+            grunt.file.write(fileName, JSON.stringify(compiled[languageKey]));
+            grunt.log.writeln('File "' + fileName + '" created.');
+          }
+          return;
         } else {
           compiled = JSON.stringify(compiled);
         }

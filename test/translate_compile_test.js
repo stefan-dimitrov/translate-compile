@@ -67,6 +67,30 @@ exports.translate_compile = {
 
     test.done();
   },
+  file_per_key: function(test) {
+    test.expect(3);
+
+    var compiledFiles = [
+      'test/expected/compiled-multi-by-key/compiled_enUs.json',
+      'test/expected/compiled-multi-by-key/compiled_ptBr.json',
+      'test/expected/compiled-multi-by-key/compiled_esEs.json'
+    ];
+    var actual = [
+      grunt.file.read('tmp/compiled-multi-by-key/compiled_enUs.json'),
+      grunt.file.read('tmp/compiled-multi-by-key/compiled_ptBr.json'),
+      grunt.file.read('tmp/compiled-multi-by-key/compiled_esEs.json')
+    ];
+    var expected = [
+      grunt.file.read(compiledFiles[0]),
+      grunt.file.read(compiledFiles[1]),
+      grunt.file.read(compiledFiles[2])
+    ];
+    test.equal(actual[0], expected[0], errorMsg + compiledFiles[0]);
+    test.equal(actual[1], expected[1], errorMsg + compiledFiles[1]);
+    test.equal(actual[2], expected[2], errorMsg + compiledFiles[2]);
+
+    test.done();
+  },
   multi_files_with_pattern: function(test) {
     test.expect(1);
 
