@@ -45,22 +45,36 @@ module.exports = function(grunt) {
       // Compile translation markup
       var compiled = compile(translations);
 
+      var outputFiles = handleOptions(compiled, f.dest);
+
+      // Write all destination files.
+      for (var destFileName in outputFiles) {
+        grunt.file.write(destFileName, outputFiles[destFileName]);
+
+        // Give me five!
+        grunt.log.writeln('File "' + destFileName + '" created.');
+      }
+
+    });
+
+    function handleOptions(compiled, fileDest) {
+      var outputFiles = {};
+
       // Handle options.
       if (options.asJson) {
         // no js variables printed
         if (options.moduleExports) {
-          compiled = 'module.exports = ' + JSON.stringify(compiled) + ';';
+          outputFiles[fileDest] = 'module.exports = ' + JSON.stringify(compiled) + ';';
 
         } else if (options.filePerLang) {
           // one file per language
           for (var languageKey in compiled) {
-            var fileName = f.dest.replace('{lang}', languageKey);
-            grunt.file.write(fileName, JSON.stringify(compiled[languageKey]));
-            grunt.log.writeln('File "' + fileName + '" created.');
+            var fileName = fileDest.replace('{lang}', languageKey);
+            outputFiles[fileName] = JSON.stringify(compiled[languageKey]);
           }
-          return;
+          //return outputFiles;
         } else {
-          compiled = JSON.stringify(compiled);
+          outputFiles[fileDest] = JSON.stringify(compiled);
         }
       } else if (options.multipleObjects) {
         // one variable per language
@@ -69,19 +83,14 @@ module.exports = function(grunt) {
         for (var language in compiled) {
           tmp += prefix + language + ' = ' + JSON.stringify(compiled[language]) + ';';
         }
-        compiled = tmp;
+        outputFiles[fileDest] = tmp;
       } else {
         // one root variable enclosing all languages
-        compiled = 'var ' + options.translationVar + ' = ' + JSON.stringify(compiled) + ';';
+        outputFiles[fileDest] = 'var ' + options.translationVar + ' = ' + JSON.stringify(compiled) + ';';
       }
 
-      // Write the destination file.
-      grunt.file.write(f.dest, compiled);
-
-      // Give me five!
-      grunt.log.writeln('File "' + f.dest + '" created.');
-
-    });
+      return outputFiles;
+    }
 
     function compile(translations) {
 
