@@ -62,7 +62,7 @@ module.exports = function(grunt) {
       },
       file_per_key: {
         options: {
-          multipleFiles: true,
+          filePerLang: true,
           asJson: true
         },
         files: {

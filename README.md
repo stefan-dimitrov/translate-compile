@@ -211,7 +211,7 @@ Default value: `false`
 
 Should this value be set to true there will be no variable assignment inside the file, only the resulting json will be there.
 
-#### options.multipleFiles
+#### options.filePerLang
 Type: `Boolean`
 Default value: `false`
 
